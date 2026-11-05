@@ -1,0 +1,124 @@
+@model AcxiomCRM.Models.Opportunity
+
+@{
+    ViewData["Title"] = "Edit Opportunity";
+}
+
+<div class="container py-4">
+    <h2 class="fw-bold">Edit Opportunity</h2>
+    <p class="text-muted">Update sales opportunity details.</p>
+
+    <div class="card border-0 shadow-sm mt-3">
+        <div class="card-body p-4">
+
+            <form asp-action="Edit" asp-route-id="@Model.OpportunityId"
+                  method="post">
+                @Html.AntiForgeryToken()
+
+                <input type="hidden" asp-for="OpportunityId" />
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3"></div>
+
+                <div class="row g-3">
+
+                    <div class="col-md-6">
+                        <label asp-for="OpportunityName" class="form-label">
+                            Opportunity Name
+                        </label>
+                        <input asp-for="OpportunityName" class="form-control" />
+                        <span asp-validation-for="OpportunityName"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="CustomerId" class="form-label">
+                            Customer
+                        </label>
+                        <select asp-for="CustomerId"
+                                asp-items="ViewBag.Customers"
+                                class="form-select">
+                            <option value="">-- Select Customer --</option>
+                        </select>
+                        <span asp-validation-for="CustomerId"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="LeadId" class="form-label">
+                            Linked Lead
+                        </label>
+                        <select asp-for="LeadId"
+                                asp-items="ViewBag.Leads"
+                                class="form-select">
+                            <option value="">-- Direct Opportunity --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="DealAmount" class="form-label">
+                            Deal Amount (₹)
+                        </label>
+                        <input asp-for="DealAmount" type="number"
+                               min="1" step="0.01" class="form-control" />
+                        <span asp-validation-for="DealAmount"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Probability" class="form-label">
+                            Probability (%)
+                        </label>
+                        <input asp-for="Probability" type="number"
+                               min="0" max="100" class="form-control" />
+                        <span asp-validation-for="Probability"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="ExpectedCloseDate" class="form-label">
+                            Expected Closing Date
+                        </label>
+                        <input asp-for="ExpectedCloseDate" type="date"
+                               class="form-control" />
+                        <span asp-validation-for="ExpectedCloseDate"
+                              class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Stage" class="form-label">
+                            Sales Stage
+                        </label>
+                        <select asp-for="Stage" class="form-select">
+                            <option>Qualification</option>
+                            <option>Proposal</option>
+                            <option>Negotiation</option>
+                            <option>Won</option>
+                            <option>Lost</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Notes" class="form-label">Notes</label>
+                        <textarea asp-for="Notes" class="form-control"
+                                  rows="3"></textarea>
+                    </div>
+
+                </div>
+
+                <div class="mt-4 d-flex gap-2">
+                    <button type="submit" class="btn btn-primary">
+                        Update Opportunity
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">Cancel</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

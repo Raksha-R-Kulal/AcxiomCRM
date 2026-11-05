@@ -1,0 +1,47 @@
+@model AcxiomCRM.Models.Opportunity
+
+@{
+    ViewData["Title"] = "Delete Opportunity";
+}
+
+<div class="container py-5">
+    <div class="card border-0 shadow-sm mx-auto"
+         style="max-width:600px">
+
+        <div class="card-body p-4 text-center">
+
+            <div style="font-size:45px">⚠️</div>
+
+            <h3 class="text-danger fw-bold">Delete Opportunity?</h3>
+
+            <p class="text-muted">
+                Are you sure you want to delete this opportunity?
+            </p>
+
+            <div class="bg-light rounded p-3 text-start mb-4">
+                <p><strong>Opportunity:</strong> @Model.OpportunityName</p>
+                <p><strong>Customer:</strong> @Model.Customer?.CustomerName</p>
+                <p><strong>Deal Amount:</strong> ₹@Model.DealAmount.ToString("N0")</p>
+                <p><strong>Stage:</strong> @Model.Stage</p>
+                <p class="mb-0">
+                    <strong>Closing Date:</strong>
+                    @Model.ExpectedCloseDate.ToString("dd MMM yyyy")
+                </p>
+            </div>
+
+            <form asp-action="Delete"
+                  asp-route-id="@Model.OpportunityId" method="post">
+
+                @Html.AntiForgeryToken()
+
+                <button type="submit" class="btn btn-danger">
+                    Yes, Delete
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">Cancel</a>
+            </form>
+
+        </div>
+    </div>
+</div>

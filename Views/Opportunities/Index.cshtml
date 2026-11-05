@@ -1,0 +1,131 @@
+@model IEnumerable<AcxiomCRM.Models.Opportunity>
+
+@{
+    ViewData["Title"] = "Opportunities";
+}
+
+<div class="container-fluid py-4">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold">Opportunity Management</h2>
+            <p class="text-muted">Track your sales pipeline and deals.</p>
+        </div>
+
+        <a asp-action="Create" class="btn btn-primary">
+            + Add Opportunity
+        </a>
+    </div>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+
+    <form method="get" class="row g-2 mb-3">
+        <div class="col-md-5">
+            <input name="search" value="@ViewBag.Search"
+                   class="form-control"
+                   placeholder="Search opportunity or customer..." />
+        </div>
+
+        <div class="col-md-3">
+            <select name="stage" class="form-select">
+                <option value="">All Stages</option>
+                <option>Qualification</option>
+                <option>Proposal</option>
+                <option>Negotiation</option>
+                <option>Won</option>
+                <option>Lost</option>
+            </select>
+        </div>
+
+        <div class="col-md-4">
+            <button class="btn btn-dark">Search</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">Clear</a>
+        </div>
+    </form>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Total Opportunities</small>
+                <h3 class="fw-bold">@Model.Count()</h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Total Deal Value</small>
+                <h3 class="fw-bold text-primary">
+                    ₹@Model.Sum(o => o.DealAmount).ToString("N0")
+                </h3>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card border-0 shadow-sm p-3">
+                <small class="text-muted">Weighted Pipeline</small>
+                <h3 class="fw-bold text-success">
+                    ₹@Model.Sum(o => o.DealAmount * o.Probability / 100m).ToString("N0")
+                </h3>
+            </div>
+        </div>
+    </div>
+
+    <div class="card border-0 shadow-sm">
+        <div class="card-body table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Opportunity</th>
+                        <th>Customer</th>
+                        <th>Lead</th>
+                        <th>Deal Amount</th>
+                        <th>Probability</th>
+                        <th>Expected Close</th>
+                        <th>Stage</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="fw-semibold">@item.OpportunityName</td>
+                            <td>@item.Customer?.CustomerName</td>
+                            <td>@(item.Lead?.LeadName ?? "Direct")</td>
+                            <td>₹@item.DealAmount.ToString("N0")</td>
+                            <td>@item.Probability%</td>
+                            <td>@item.ExpectedCloseDate.ToString("dd MMM yyyy")</td>
+                            <td>
+                                <span class="badge bg-primary">@item.Stage</span>
+                            </td>
+                            <td>
+                                <a asp-action="Edit"
+                                   asp-route-id="@item.OpportunityId"
+                                   class="btn btn-sm btn-outline-primary">
+                                    Edit
+                                </a>
+
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.OpportunityId"
+                                   class="btn btn-sm btn-outline-danger">
+                                    Delete
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            @if (!Model.Any())
+            {
+                <div class="text-center text-muted py-4">
+                    No opportunities found. Add your first opportunity!
+                </div>
+            }
+        </div>
+    </div>
+</div>
